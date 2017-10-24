@@ -1,8 +1,8 @@
-import numpy as np 
-from scipy import stats 
+import numpy as np
+from scipy import stats
 from sklearn.datasets import fetch_mldata
 
-#Basics: 
+#Basics:
 #load mnist dataset
 mnist = fetch_mldata('MNIST original')
 a = mnist.data.shape
@@ -13,10 +13,11 @@ print(a)
 print(b)
 print(c)
 # Question 1
+
+#neuron definition
+def node:
+
 print("Question 1: ")
-
-
-
 
 # Question 2
 print("Question 2: ")
