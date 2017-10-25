@@ -34,6 +34,16 @@ for train_index, test_index in kf.split(X):
 def backpropogation():
     return 1;
 
+
+def activation(weights, inputs):
+    activation= 0; 
+    for i in range(len(weights)-1):
+        activation +=weights[i]*inputs[i]
+    return activation
+
+
+
+
 class Node(object):
     prevLayer = []
     nextLayer = []
