@@ -1,6 +1,9 @@
 import numpy as np
 from scipy import stats
 from sklearn.datasets import fetch_mldata
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+from sklearn import svm
 import random
 
 
@@ -15,6 +18,21 @@ print(a)
 print(b)
 print(c)
 # Question 1
+# Set up:
+# spliting the test and training set for k fold cross coreletion with a 10 fold
+kf = KFold(n_splits=10);
+X=mnist.data
+y=mnist.target
+for train_index, test_index in kf.split(X):
+    print("TRAIN:", train_index, "TEST:", test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    #print(len(train_index))
+    print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
+    # in here do the work with testing with the k fold train and test
+
+def backpropogation():
+    return 1;
 
 class Node(object):
     prevLayer = []
@@ -39,6 +57,7 @@ class NeuralNetwork(object):
 
 
 print("Question 1: ")
+
 
 
 # Question 2
