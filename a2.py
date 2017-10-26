@@ -25,16 +25,15 @@ print(d)
 kf = KFold(n_splits=10);
 X=mnist.data
 y=mnist.target
-for train_index, test_index in kf.split(X):
-    print("TRAIN:", train_index, "TEST:", test_index)
-    X_train, X_test = X[train_index], X[test_index]
-    y_train, y_test = y[train_index], y[test_index]
-    #print(len(train_index))
-    print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
-    # in here do the work with testing with the k fold train and test
+# for train_index, test_index in kf.split(X):
+#     print("TRAIN:", train_index, "TEST:", test_index)
+#     X_train, X_test = X[train_index], X[test_index]
+#     y_train, y_test = y[train_index], y[test_index]
+#     #print(len(train_index))
+#     print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
+#     # in here do the work with testing with the k fold train and test
 
-def backpropogation():
-    return 1;
+
 
 
 def activation(weights, inputs):
@@ -78,6 +77,8 @@ class Node(object):
         self.nextLayer = []
         self.value = None
         self.inputNode = None
+        self.correction=None
+        self.out=None
 
 
 
@@ -89,17 +90,20 @@ class Node(object):
 class inputNode(object):
     def __init__(self):
         value = None
+        self.nextLayer = []
 
 class outputNode(object):
     def __init__(self,target):
         self.weights = []
         self.value = None
         self.output = target
+        self.correction=None
 
     def createWeights(self,prevLayer):
         for i in prevLayer:
             #may need to change initial random values
             self.weights.append([i, (random.randrange(1,10)*0.01)])
+
 
 
 
@@ -183,17 +187,71 @@ class NeuralNetwork(object):
         return(guess)
 
 
+    def backpropogation(self,correctResult):
+        #output layer correction
+        for i in self.outputLayer:
+            expected= 1 if i.output==correctResult else 0
+            out=i.output
+            error = expected-out
+            i.correction = error*out*(1-out)
+
+        #layer before output, correction 
+        for i in range(0,len(self.outputLayer)):
+            node = self.outputLayer[i]
+            for k in node.weights:
+                correctionSum=0;
+                for n in k.nextLayer:
+                    correctionSum+=k[1]*n.correction
+                k[0].correction=node.value*(1-node.value)*correctionSum
+                k[1]=k[1]+0.5*node.value*k[0].correction
+
+        #all other layers correction
+        for i in range(len(self.layers)-1,1,-1):
+            for j in range(0,len(self.layers[i])):
+                node = self.layers[i][j]
+                inputSum = 0
+                for k in node.weights:
+                    correctionSum=0;
+                if hasattr(k,"nextLayer"):
+                    for n in k.nextLayer:
+                        correctionSum+=k[1]*n.correction
+                    k[0].correction=node.value*(1-node.value)*correctionSum
+                    k[1]=k[1]+0.5*node.value*k[0].correction
 
 
+        
+def train(X,y):
+    count=0;
+    for x in range(len(X)):
+        q1Network.createOutput(X[x])
+        q1Network.backpropogation(y[x])
+        count+=1;
+        print("done itteration:")
+        print(count)
+
+def test(X,y):
+    diffSum=0
+    diffCount=0
+    for x in range(len(X)):
+        diffSum+= y[x]-q1Network.createOutput(X[x]) 
+        diffCount+=1
+    realDiff=diffSum/diffCount
+    print("Done testing result:")
+    print(realDiff);
 
 
+X=mnist.data
+y=mnist.target
 q1Network = NeuralNetwork(784,9,784)
-print(q1Network.createOutput(X[45]))
+# print(q1Network.createOutput(X[14600]))
+# print(y[14600])
+# print(y)
+# print(y.size)
 print("Question 1: ")
-start_time = time.time()
-#results = run()
-end_time = time.time()
-print ("Overall running time:"), end_time - start_time
+# start_time = time.time()
+# #results = run()
+# end_time = time.time()
+#print ("Overall running time:"), end_time - start_time
 for train_index, test_index in kf.split(X):
     print("TRAIN:", train_index, "TEST:", test_index)
     X_train, X_test = X[train_index], X[test_index]
@@ -201,6 +259,10 @@ for train_index, test_index in kf.split(X):
     #print(len(train_index))
     print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
     # in here do the work with testing with the k fold train and test
+    train(X_train,y_train)
+    print("Done training")
+    test(X_test,y_test)
+
 
 
 
