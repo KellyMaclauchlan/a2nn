@@ -77,6 +77,7 @@ class Node(object):
         #contains nodes to pass inputs to
         self.nextLayer = []
         self.value = None
+        self.inputNode = None
 
 
 
@@ -85,7 +86,19 @@ class Node(object):
             #may need to change initial random values
             self.weights.append([i, (random.randrange(1,10)*0.01)])
 
+class inputNode(object):
+    def __init__(self):
+        value = None
 
+class outputNode(object):
+    def __init__(self,target):
+        self.weights = []
+        output = target
+
+    def createWeights(self,prevLayer):
+        for i in prevLayer:
+            #may need to change initial random values
+            self.weights.append([i, (random.randrange(1,10)*0.01)])
 
 
 
@@ -106,15 +119,36 @@ class NeuralNetwork(object):
                 self.layers[i].append(Node())
                 j += 1
             i += 1
-        #give Nodes weights to the next layer
+        print("create input layer")
         i = 0
+        while i < n_inputs:
+            self.inputLayer.append(inputNode())
+            i += 1
+        print("connect first layer in input nodes")
+        i = 0
+        while i < n_nodes:
+            self.layers[0][i].inputNode = self.inputLayer[i]
+            i += 1
+
+        #give Nodes weights to the next layer
+        i = 1
         j = 0
         while i < n_layers:
             j = 0
             while j < n_nodes:
-                self.layers[i][j].createWeights(self.layers[i])
+                self.layers[i][j].createWeights(self.layers[i-1])
                 j+=1
             i+=1
+
+        print("create output nodes")
+        i = 0
+        while i < outputs:
+            self.outputLayer.append(outputNode(i))
+            i += 1
+        print("connect output nodes to last hidden layer ")
+        for i in self.outputLayer:
+            i.createWeights(self.layers[len(self.layers)-1])
+
 
     #dataInstance is one data piece
     #dataTarget is the target output for that data
@@ -132,6 +166,7 @@ class NeuralNetwork(object):
 
 
 q1Network = NeuralNetwork(784,9,784)
+
 print("Question 1: ")
 start_time = time.time()
 results = run()
