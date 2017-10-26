@@ -71,7 +71,7 @@ def newWeight(weight,out,correct):
 
 
 class Node(object):
-    def __init__():
+    def __init__(self):
         #contains pairs of nodes and weights
         self.weights = []
         #contains nodes to pass inputs to
@@ -80,17 +80,10 @@ class Node(object):
 
 
 
-    def output():
-        for i in weights:
-            inputs += (getattr(weights[i][0],value)*weights[i][1])
-
-        self.value = 1/(1+exp(-inputs))
-
-
-    def createWeights(prevLayer):
+    def createWeights(self,prevLayer):
         for i in prevLayer:
             #may need to change initial random values
-            self.weights.append([prevLayer[i], random.randrange(0.01,0.1)])
+            self.weights.append([i, (random.randrange(1,10)*0.01)])
 
 
 
@@ -110,14 +103,16 @@ class NeuralNetwork(object):
             j = 0
             self.layers.append([])
             while j < n_nodes:
-                self.layers[i].append(Node)
+                self.layers[i].append(Node())
                 j += 1
             i += 1
         #give Nodes weights to the next layer
+        i = 0
+        j = 0
         while i < n_layers:
             j = 0
             while j < n_nodes:
-                self.layers[i][j].createweights(self.layers[i])
+                self.layers[i][j].createWeights(self.layers[i])
                 j+=1
             i+=1
 
@@ -126,10 +121,11 @@ class NeuralNetwork(object):
     def test(dataInstance,dataTarget):
 
         for i in dataInstance:
-            value = dataInstance[i]
-            for j in self.layers:
-                for k in self.layers[j]:
-                    self.layers[j][k].output()
+            j = 0
+            self.inputLayer[j] = i
+            j+=1
+
+
 
 
 
