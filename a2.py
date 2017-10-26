@@ -229,20 +229,24 @@ def train(X,y):
         print("done itteration:")
         print(count)
 
+testingResults=[]
 def test(X,y):
     diffSum=0
     diffCount=0
     for x in range(len(X)):
-        diffSum+= y[x]-q1Network.createOutput(X[x]) 
+        result= q1Network.createOutput(X[x]) 
+        if(result==y[x]):
+            diffSum+=1
         diffCount+=1
     realDiff=diffSum/diffCount
-    print("Done testing result:")
+    print("Done testing result: this percent was correct")
     print(realDiff);
+    testingResults.append(realDiff);
 
 
-X=mnist.data
+X=mnist.datas
 y=mnist.target
-q1Network = NeuralNetwork(784,9,784)
+q1Network = NeuralNetwork(784,9,20)
 # print(q1Network.createOutput(X[14600]))
 # print(y[14600])
 # print(y)
@@ -263,6 +267,7 @@ for train_index, test_index in kf.split(X):
     print("Done training")
     test(X_test,y_test)
 
+print(testingResults);
 
 
 
