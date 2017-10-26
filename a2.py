@@ -177,6 +177,7 @@ class NeuralNetwork(object):
         guessCertianty = 0
         for i in self.outputLayer:
             if i.value > guessCertianty:
+                guessCertianty = i.value
                 guess = i.output
 
         return(guess)
@@ -187,8 +188,7 @@ class NeuralNetwork(object):
 
 
 q1Network = NeuralNetwork(784,9,784)
-
-
+print(q1Network.createOutput(X[45]))
 print("Question 1: ")
 start_time = time.time()
 #results = run()
