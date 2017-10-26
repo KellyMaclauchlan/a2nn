@@ -93,7 +93,8 @@ class inputNode(object):
 class outputNode(object):
     def __init__(self,target):
         self.weights = []
-        output = target
+        self.value = None
+        self.output = target
 
     def createWeights(self,prevLayer):
         for i in prevLayer:
@@ -142,7 +143,7 @@ class NeuralNetwork(object):
 
         print("create output nodes")
         i = 0
-        while i < outputs:
+        while i <= outputs:
             self.outputLayer.append(outputNode(i))
             i += 1
         print("connect output nodes to last hidden layer ")
@@ -152,13 +153,35 @@ class NeuralNetwork(object):
 
     #dataInstance is one data piece
     #dataTarget is the target output for that data
-    def test(dataInstance,dataTarget):
+    def createOutput(self,dataInstance):
 
-        for i in dataInstance:
-            j = 0
-            self.inputLayer[j] = i
-            j+=1
+        for i in range(0,len(self.inputLayer)):
+            self.inputLayer[i].value = dataInstance[i]
 
+        for i in range(0,len(self.layers)):
+            for j in range(0,len(self.layers[i])):
+                node = self.layers[i][j]
+                inputSum = 0
+                for k in node.weights:
+                    inputSum += k[0].value * k[1]
+                node.value = sigmoid(inputSum)
+
+        for i in range(0,len(self.outputLayer)):
+            node = self.outputLayer[i]
+            for k in node.weights:
+                inputSum += k[0].value * k[1]
+
+
+            self.outputLayer[i].value = sigmoid(inputSum)
+        guess = None
+        guessCertianty = 0
+        for i in self.outputLayer:
+            if i.value > guessCertianty:
+                print("THOSFJASDFOasDF")
+                print(i.output)
+                guess = i.output
+
+        return(guess)
 
 
 
@@ -167,9 +190,10 @@ class NeuralNetwork(object):
 
 q1Network = NeuralNetwork(784,9,784)
 
+
 print("Question 1: ")
 start_time = time.time()
-results = run()
+#results = run()
 end_time = time.time()
 print ("Overall running time:"), end_time - start_time
 for train_index, test_index in kf.split(X):
