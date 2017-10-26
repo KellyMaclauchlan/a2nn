@@ -177,8 +177,6 @@ class NeuralNetwork(object):
         guessCertianty = 0
         for i in self.outputLayer:
             if i.value > guessCertianty:
-                print("THOSFJASDFOasDF")
-                print(i.output)
                 guess = i.output
 
         return(guess)
