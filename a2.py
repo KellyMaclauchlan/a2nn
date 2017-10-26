@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn import svm
 import random
+import time
 
 
 #Basics:
@@ -37,7 +38,7 @@ def backpropogation():
 
 
 def activation(weights, inputs):
-    activation= 0; 
+    activation= 0;
     for i in range(len(weights)-1):
         activation +=weights[i]*inputs[i]
     return activation
@@ -70,32 +71,76 @@ def newWeight(weight,out,correct):
 
 
 class Node(object):
-    prevLayer = []
-    nextLayer = []
-    output = 0
+    def __init__():
+        #contains pairs of nodes and weights
+        self.weights = []
+        #contains nodes to pass inputs to
+        self.nextLayer = []
+        self.value = None
+
+
 
     def output():
+        for i in weights:
+            inputs += (getattr(weights[i][0],value)*weights[i][1])
+
+        self.value = 1/(1+exp(-inputs))
+
+
+    def createWeights(prevLayer):
         for i in prevLayer:
-            output += prevLayer[i].output()
+            #may need to change initial random values
+            self.weights.append([prevLayer[i], random.randrange(0.01,0.1)])
+
+
 
 
 
 class NeuralNetwork(object):
+    #n_inputs = the number of inputs should equal the n_nodes
+    #n_layers is hidden layers
+    def __init__(self,n_inputs, outputs, n_nodes,n_layers = 3):
+        #create nodes in each layer
+        self.layers = [[]]
+        self.inputLayer = []
+        self.outputLayer = []
 
-    def __init__(self,n_nodes,n_layers = 3):
-        layers = [n_layers]
+        i = 0
+        while i < n_layers:
+            j = 0
+            self.layers.append([])
+            while j < n_nodes:
+                self.layers[i].append(Node)
+                j += 1
+            i += 1
+        #give Nodes weights to the next layer
+        while i < n_layers:
+            j = 0
+            while j < n_nodes:
+                self.layers[i][j].createweights(self.layers[i])
+                j+=1
+            i+=1
+
+    #dataInstance is one data piece
+    #dataTarget is the target output for that data
+    def test(dataInstance,dataTarget):
+
+        for i in dataInstance:
+            value = dataInstance[i]
+            for j in self.layers:
+                for k in self.layers[j]:
+                    self.layers[j][k].output()
 
 
-    def makeNetwork():
-        network = NeuralNetwork()
-        return network
 
 
+
+q1Network = NeuralNetwork(784,9,784)
 print("Question 1: ")
 start_time = time.time()
 results = run()
 end_time = time.time()
-print "Overall running time:", end_time - start_time
+print ("Overall running time:"), end_time - start_time
 for train_index, test_index in kf.split(X):
     print("TRAIN:", train_index, "TEST:", test_index)
     X_train, X_test = X[train_index], X[test_index]
