@@ -230,7 +230,6 @@ def train(X,y):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
-        print(guess)
     #    if (count % 1000 == 0): print(count)
         #print(count)
 
