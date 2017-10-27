@@ -84,6 +84,7 @@ class Node(object):
 
     def createWeights(self,prevLayer):
         for i in prevLayer:
+
             #may need to change initial random values
             self.weights.append([i, (random.randrange(1,10)*0.01)])
 
@@ -132,8 +133,9 @@ class NeuralNetwork(object):
         print("connect first layer in input nodes")
         i = 0
         while i < n_nodes:
-            self.layers[0][i].inputNode = self.inputLayer[i]
+            self.layers[0][i].createWeights(self.inputLayer)
             i += 1
+
 
         #give Nodes weights to the next layer
         i = 1
@@ -195,7 +197,7 @@ class NeuralNetwork(object):
             error = expected-out
             i.correction = error*out*(1-out)
 
-        #layer before output, correction 
+        #layer before output, correction
         for i in range(0,len(self.outputLayer)):
             node = self.outputLayer[i]
             for k in node.weights:
@@ -219,22 +221,23 @@ class NeuralNetwork(object):
                     k[1]=k[1]+0.5*node.value*k[0].correction
 
 
-        
+
 def train(X,y):
     count=0;
     for x in range(len(X)):
         q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
-        print("done itteration:")
-        print(count)
+        #print("done itteration:")
+        #if (count % 1000 == 0): print(count)
+        #print(count)
 
 testingResults=[]
 def test(X,y):
     diffSum=0
     diffCount=0
     for x in range(len(X)):
-        result= q1Network.createOutput(X[x]) 
+        result= q1Network.createOutput(X[x])
         if(result==y[x]):
             diffSum+=1
         diffCount+=1
