@@ -148,10 +148,10 @@ class NeuralNetwork(object):
             i+=1
 
         print("create output nodes")
-        i = 0
+        i = 0.0
         while i <= outputs:
             self.outputLayer.append(outputNode(i))
-            i += 1
+            i += 1.0
         print("connect output nodes to last hidden layer ")
         for i in self.outputLayer:
             i.createWeights(self.layers[len(self.layers)-1])
