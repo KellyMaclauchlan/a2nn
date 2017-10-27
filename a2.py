@@ -202,11 +202,12 @@ class NeuralNetwork(object):
         for i in range(0,len(self.outputLayer)):
             node = self.outputLayer[i]
             for k in node.weights:
-                correctionSum=0;
-                for n in k.nextLayer:
-                    correctionSum+=k[1]*n.correction
-                k[0].correction=node.value*(1-node.value)*correctionSum
-                k[1]=k[1]+0.5*node.value*k[0].correction
+                if hasattr(k,"nextLayer"):
+                    correctionSum=0;
+                    for n in k.nextLayer:
+                        correctionSum+=k[1]*n.correction
+                    k[0].correction=node.value*(1-node.value)*correctionSum
+                    k[1]=k[1]+0.5*node.value*k[0].correction
 
         #all other layers correction
         for i in range(len(self.layers)-1,1,-1):
@@ -229,7 +230,7 @@ def train(X,y):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
-        print("done itteration:")
+        print(guess)
     #    if (count % 1000 == 0): print(count)
         #print(count)
 
