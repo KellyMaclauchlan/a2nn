@@ -244,7 +244,7 @@ def test(X,y):
     testingResults.append(realDiff);
 
 
-X=mnist.datas
+X=mnist.data
 y=mnist.target
 q1Network = NeuralNetwork(784,9,20)
 # print(q1Network.createOutput(X[14600]))
