@@ -113,7 +113,7 @@ class NeuralNetwork(object):
     #n_layers is hidden layers
     def __init__(self,n_inputs, outputs, n_nodes,n_layers = 3):
         #create nodes in each layer
-        self.layers = [[]]
+        self.layers = []
         self.inputLayer = []
         self.outputLayer = []
 
@@ -160,10 +160,9 @@ class NeuralNetwork(object):
     #dataInstance is one data piece
     #dataTarget is the target output for that data
     def createOutput(self,dataInstance):
-
+        arr = []
         for i in range(0,len(self.inputLayer)):
             self.inputLayer[i].value = dataInstance[i]
-
         for i in range(0,len(self.layers)):
             for j in range(0,len(self.layers[i])):
                 node = self.layers[i][j]
@@ -171,7 +170,7 @@ class NeuralNetwork(object):
                 for k in node.weights:
                     inputSum += k[0].value * k[1]
                 node.value = sigmoid(inputSum)
-
+                inputSum = 0
         for i in range(0,len(self.outputLayer)):
             node = self.outputLayer[i]
             for k in node.weights:
@@ -179,13 +178,15 @@ class NeuralNetwork(object):
 
 
             self.outputLayer[i].value = sigmoid(inputSum)
+            inputSum = 0
         guess = None
         guessCertianty = 0
+
         for i in self.outputLayer:
+            arr.append(i.value)
             if i.value > guessCertianty:
                 guessCertianty = i.value
                 guess = i.output
-
         return(guess)
 
 
@@ -225,11 +226,11 @@ class NeuralNetwork(object):
 def train(X,y):
     count=0;
     for x in range(len(X)):
-        q1Network.createOutput(X[x])
+        guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
-        #print("done itteration:")
-        #if (count % 1000 == 0): print(count)
+        print("done itteration:")
+    #    if (count % 1000 == 0): print(count)
         #print(count)
 
 testingResults=[]
