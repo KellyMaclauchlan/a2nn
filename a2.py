@@ -22,7 +22,7 @@ print(d)
 # Question 1
 # Set up:
 # spliting the test and training set for k fold cross coreletion with a 10 fold
-kf = KFold(n_splits=10);
+kf = KFold(n_splits=10, shuffle=True);
 X=mnist.data
 y=mnist.target
 # for train_index, test_index in kf.split(X):
@@ -181,7 +181,7 @@ class NeuralNetwork(object):
             inputSum = 0
         guess = None
         guessCertianty = 0
-
+        count=0;
         for i in self.outputLayer:
             arr.append(i.value)
             if i.value > guessCertianty:
@@ -192,11 +192,13 @@ class NeuralNetwork(object):
 
     def backpropogation(self,correctResult):
         #output layer correction
+        count=0
         for i in self.outputLayer:
-            expected= 1 if i.output==correctResult else 0
-            out=i.output
+            expected= 1 if count==correctResult else 0
+            out=i.value
             error = expected-out
             i.correction = error*out*(1-out)
+            count+=1
 
         # #layer before output, correction
         # for i in range(0,len(self.layers[len(self.layers)-1])-1):
@@ -207,20 +209,28 @@ class NeuralNetwork(object):
                 correctionSum=0;
                 for n in self.outputLayer:
                     correctionSum+=k[1]*n.correction
-                k[0].correction=node.value*(1-node.value)*correctionSum
-                k[1]=k[1]+0.5*node.value*k[0].correction
+                # print(k[1])
+                # print(k[1]+0.5*node.value*k[0].correction)
+                correct=node.value*(1-node.value)*correctionSum
+                # print(correct)
+                self.layers[len(self.layers)-1][t].weights[j][0].correction=correct
+                self.layers[len(self.layers)-1][t].weights[j][1]=k[1]+0.5*node.value*correct
+                # print(k[1]+0.5*node.value*k[0].correction)
+                # print(k[1])
+                # print(self.layers[len(self.layers)-1][t].weights[j][1])
 
         #all other layers correction
         for i in range(len(self.layers)-2,1,-1):
             for j in range(0,len(self.layers[i])):
                 node = self.layers[i][j]
-                for j in range(0,len(node.weights)):
-                    k =node.weights[j]
+                for f in range(0,len(node.weights)):
+                    k =node.weights[f]
                     correctionSum=0;
                     for n in self.layers[i+1]:
                         correctionSum+=k[1]*n.correction
-                    k[0].correction=node.value*(1-node.value)*correctionSum
-                    k[1]=k[1]+0.5*node.value*k[0].correction
+                    correct=node.value*(1-node.value)*correctionSum
+                    self.layers[i][j].weights[f][0].correction=correct
+                    self.layers[i][j].weights[f][1]=k[1]+0.5*node.value*correct
 
                 # inputSum = 0
                 # for k in node.weights:
@@ -235,23 +245,31 @@ class NeuralNetwork(object):
 
 def train(X,y):
     count=0;
-    for x in range(len(X)):
+    # for x in range(len(X)):
+    for x in range(3000):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
+        print(guess)
+        print(y[x])
     #    if (count % 1000 == 0): print(count)
         print(count)
+        if(guess==y[x]):
+            print(guess)
+            print(y[x])
+
 
 testingResults=[]
 def test(X,y):
     diffSum=0
     diffCount=0
-    for x in range(len(X)):
+    # for x in range(len(X)):
+    for x in range(3000):
         result= q1Network.createOutput(X[x])
         if(result==y[x]):
             diffSum+=1
         diffCount+=1
-    realDiff=diffSum/diffCount
+        realDiff=diffSum/diffCount
     print("Done testing result: this percent was correct")
     print(realDiff);
     testingResults.append(realDiff);
@@ -259,7 +277,7 @@ def test(X,y):
 
 X=mnist.data
 y=mnist.target
-q1Network = NeuralNetwork(784,9,20)
+q1Network = NeuralNetwork(784,9,15)
 # print(q1Network.createOutput(X[14600]))
 # print(y[14600])
 # print(y)
@@ -269,6 +287,8 @@ print("Question 1: ")
 # #results = run()
 # end_time = time.time()
 #print ("Overall running time:"), end_time - start_time
+ccc=0
+
 for train_index, test_index in kf.split(X):
     print("TRAIN:", train_index, "TEST:", test_index)
     X_train, X_test = X[train_index], X[test_index]
@@ -276,6 +296,7 @@ for train_index, test_index in kf.split(X):
     #print(len(train_index))
     print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
     # in here do the work with testing with the k fold train and test
+
     train(X_train,y_train)
     print("Done training")
     test(X_test,y_test)
