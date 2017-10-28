@@ -245,8 +245,8 @@ class NeuralNetwork(object):
 
 def train(X,y):
     count=0;
-    # for x in range(len(X)):
-    for x in range(3000):
+    for x in range(len(X)):
+    #for x in range(3000):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
@@ -263,8 +263,8 @@ testingResults=[]
 def test(X,y):
     diffSum=0
     diffCount=0
-    # for x in range(len(X)):
-    for x in range(3000):
+    for x in range(len(X)):
+    #for x in range(3000):
         result= q1Network.createOutput(X[x])
         if(result==y[x]):
             diffSum+=1
