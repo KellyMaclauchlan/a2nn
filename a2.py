@@ -156,6 +156,8 @@ class NeuralNetwork(object):
         for i in self.outputLayer:
             i.createWeights(self.layers[len(self.layers)-1])
 
+        self.layers.append(self.outputLayer)
+
 
     #dataInstance is one data piece
     #dataTarget is the target output for that data
@@ -219,6 +221,7 @@ class NeuralNetwork(object):
                 # print(k[1])
                 # print(self.layers[len(self.layers)-1][t].weights[j][1])
 
+
         #all other layers correction
         for i in range(len(self.layers)-2,1,-1):
             for j in range(0,len(self.layers[i])):
@@ -250,13 +253,14 @@ def train(X,y):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
-        print(guess)
-        print(y[x])
+#        print(guess)
+#        print(y[x])
     #    if (count % 1000 == 0): print(count)
-        print(count)
-        if(guess==y[x]):
-            print(guess)
-            print(y[x])
+#        print(count)
+#        if(guess==y[x]):
+#            print(guess)
+#            print(y[x])
+    #        print(q1Network.outputLayer[4].weights[4][1])
 
 
 testingResults=[]
