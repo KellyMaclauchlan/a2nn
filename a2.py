@@ -198,29 +198,38 @@ class NeuralNetwork(object):
             error = expected-out
             i.correction = error*out*(1-out)
 
-        #layer before output, correction
-        for i in range(0,len(self.outputLayer)):
-            node = self.outputLayer[i]
-            for k in node.weights:
-                if hasattr(k,"nextLayer"):
+        # #layer before output, correction
+        # for i in range(0,len(self.layers[len(self.layers)-1])-1):
+        for t in range(0,len(self.layers[len(self.layers)-1])):
+            node = self.layers[len(self.layers)-1][t]
+            for j in range(0,len(node.weights)):
+                k =node.weights[j]
+                correctionSum=0;
+                for n in self.outputLayer:
+                    correctionSum+=k[1]*n.correction
+                k[0].correction=node.value*(1-node.value)*correctionSum
+                k[1]=k[1]+0.5*node.value*k[0].correction
+
+        #all other layers correction
+        for i in range(len(self.layers)-2,1,-1):
+            for j in range(0,len(self.layers[i])):
+                node = self.layers[i][j]
+                for j in range(0,len(node.weights)):
+                    k =node.weights[j]
                     correctionSum=0;
-                    for n in k.nextLayer:
+                    for n in self.layers[i+1]:
                         correctionSum+=k[1]*n.correction
                     k[0].correction=node.value*(1-node.value)*correctionSum
                     k[1]=k[1]+0.5*node.value*k[0].correction
 
-        #all other layers correction
-        for i in range(len(self.layers)-1,1,-1):
-            for j in range(0,len(self.layers[i])):
-                node = self.layers[i][j]
-                inputSum = 0
-                for k in node.weights:
-                    correctionSum=0;
-                if hasattr(k,"nextLayer"):
-                    for n in k.nextLayer:
-                        correctionSum+=k[1]*n.correction
-                    k[0].correction=node.value*(1-node.value)*correctionSum
-                    k[1]=k[1]+0.5*node.value*k[0].correction
+                # inputSum = 0
+                # for k in node.weights:
+                #     correctionSum=0;
+                # if hasattr(k,"nextLayer"):
+                #     for n in k.nextLayer:
+                #         correctionSum+=k[1]*n.correction
+                #     k[0].correction=node.value*(1-node.value)*correctionSum
+                #     k[1]=k[1]+0.5*node.value*k[0].correction
 
 
 
@@ -231,7 +240,7 @@ def train(X,y):
         q1Network.backpropogation(y[x])
         count+=1;
     #    if (count % 1000 == 0): print(count)
-        #print(count)
+        print(count)
 
 testingResults=[]
 def test(X,y):
