@@ -255,12 +255,13 @@ def train(X,y):
         count+=1;
 #        print(guess)
 #        print(y[x])
-    #    if (count % 1000 == 0): print(count)
+#        print()
+        if (count % 1000 == 0): print(count)
 #        print(count)
-#        if(guess==y[x]):
-#            print(guess)
-#            print(y[x])
-    #        print(q1Network.outputLayer[4].weights[4][1])
+        # if(guess==y[x]):
+        #     print(guess)
+        #     print(y[x])
+        #     print(q1Network.outputLayer[0].weights[4][1])
 
 
 testingResults=[]
@@ -281,7 +282,7 @@ def test(X,y):
 
 X=mnist.data
 y=mnist.target
-q1Network = NeuralNetwork(784,9,15)
+q1Network = NeuralNetwork(784,10,3)
 # print(q1Network.createOutput(X[14600]))
 # print(y[14600])
 # print(y)
