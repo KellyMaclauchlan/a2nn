@@ -26,8 +26,7 @@ def getR(dists,k):
 def hiddenFunc(X,i):
 	a=LA.norm(X-centers[i])
 	b= (a)**2
-	c=(b)/r[i]**2
-	print(c)
+	c=(b)/(r[i]**2)
 	return math.exp(-(c))
 
 
@@ -63,44 +62,93 @@ r=[]
 for dist in dists:
 	r.append(getR(dist,20))
 
-print(r[0])
-print("look above")
 
 
+#weights[i][j]= 1/(r[i] *math.sqrt(2*math.pi))
 def createWeights(h,o):
 	for i in range(0,h):
 		for j in range(0,o):
-			weights[i][j]=(random.randrange(1,10)*0.01)
+			weights[i][j]= (random.randrange(1,10)*0.01)
 
 def outSum(i,hiddenOuts):
 	oSum=0;
 	for h in range(0,clusters):
 		oSum+=weights[h][i]*hiddenOuts[h]
 	return oSum
+outLayerY=[0,1,2,3,4,5,6,7,8,9]
 
-def nn(inputs):
+def nn(inputs,training):
 	count=0;
-	for i in inputs:
-		hiddenOuts=[]
-		outputLayer=[]
-		for h in range(0,clusters):
-			hiddenOuts.append(hiddenFunc(i,h))
-		for o in range(0,10):
-			outputLayer.append(outSum(o,hiddenOuts))
+	# for i in inputs:
+	hiddenOuts=[]
+	outputLayer=[]
+	for h in range(0,clusters):
+		hiddenOuts.append(hiddenFunc(inputs,h))
+	for o in range(0,10):
+		outputLayer.append(outSum(o,hiddenOuts))
 
-		print(outputLayer)
-		print (y[count])
-		print count
-		count+=1
+	# print(outputLayer)
+	# print (y[count])
+	# print count
+	count+=1
+	if(training):
+		for i in range(0,h):
+			for j in range(0,o):
+				weights[i][j]= np.dot(hiddenOuts[i],outLayerY)
 
+	maxOut=-50
+	result=0
+	console.log(outputLayer[0])
+	console.log(len(outputLayer))
+	for o in range(0,len(outputLayer)):
+		if(outputLayer[o]>maxOut):
+			maxOut=outputLayer[o]
+			result=o
+
+	return result
 
 def trainNN(X,y):
-	createWeights(clusters,10)
-	nn(X)
+	
+	for x in range(0,len(X)):
+		out=nn(X[x],True)
+		# print("result:")
+		# print(out)
+		# print("should be:")
+		# print(y[x])
 
-trainNN(X,y)
+testingResults=[]
+def testNN(X,y):
+	correct=0;
+	for x in range(0,len(X)):
+		out=nn(X[x],False)
+		print("result:")
+		print(out)
+		print("should be:")
+		print(y[x])
+		if(out==y[0]):
+			print("correct")
+			correct+=1
+	res=correct/len(X)
+	testingResults.append(res)
+	print(res)
+	print(correct)
+	
 
+createWeights(clusters,10)
 
+for train_index, test_index in kf.split(X):
+    print("TRAIN:", train_index, "TEST:", test_index)
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    #print(len(train_index))
+    print("TRAIN size:", len(train_index), "TEST size:", len(test_index))
+    # in here do the work with testing with the k fold train and test
+
+    trainNN(X_train,y_train)
+    print("Done training")
+    testNN(X_test,y_test)
+
+print(testingResults);
 
 
 
