@@ -12,10 +12,10 @@ import time
 import math
 
 mnist = fetch_mldata('MNIST original')
-kf = KFold(n_splits=10, shuffle=True);
+kf = KFold(n_splits=5, shuffle=True);
 X=mnist.data
 y=mnist.target
-weights= [[0 for i in range(10)] for j in range(15)] #np.zeros((15,10))
+weights= [[0 for i in range(10)] for j in range(9)] #np.zeros((15,10))
 #print(weights)
 def getR(dists,k):
 	sumSquared=0
@@ -45,7 +45,9 @@ class rbfNetwork(object):
 
 net = rbfNetwork(10,784,256)
 
-clusters=15
+clusters=9
+print("with clusters n=")
+print(clusters)
 kmeans = KMeans(n_clusters=clusters, random_state=0).fit(X)
 
 centers = kmeans.cluster_centers_
@@ -119,17 +121,20 @@ def trainNN(X,y):
 
 testingResults=[]
 def testNN(X,y):
-	correct=0;
+	correct=0
+	whole=0
 	for x in range(0,len(X)):
 		out=nn(X[x],False)
 		print("result:")
 		print(out)
 		print("should be:")
 		print(y[x])
-		if(out==y[0]):
+		print(out==y[x])
+		if(out==y[x]):
 			print("correct")
 			correct+=1
-	res=correct/len(X)
+		whole+=1
+	res=correct/whole
 	testingResults.append(res)
 	print(res)
 	print(correct)
