@@ -120,24 +120,27 @@ def trainNN(X,y):
 		# print(y[x])
 
 testingResults=[]
+testingCorrect=[]
 def testNN(X,y):
 	correct=0
 	whole=0
 	for x in range(0,len(X)):
 		out=nn(X[x],False)
-		print("result:")
-		print(out)
-		print("should be:")
-		print(y[x])
-		print(out==y[x])
+		# print("result:")
+		# print(out)
+		# print("should be:")
+		# print(y[x])
+		# print(out==y[x])
 		if(out==y[x]):
-			print("correct")
+			#print("correct")
 			correct+=1
 		whole+=1
 	res=correct/whole
 	testingResults.append(res)
+	testingCorrect.append(correct)
 	print(res)
 	print(correct)
+	print(whole)
 	
 
 createWeights(clusters,10)
