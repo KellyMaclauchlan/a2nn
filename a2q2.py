@@ -74,6 +74,9 @@ def outSum(i,hiddenOuts):
 	oSum=0;
 	for h in range(0,clusters):
 		oSum+=weights[h][i]*hiddenOuts[h]
+		print weights[h][i]
+		print("weight above hidden below")
+		print hiddenOuts[h]
 	return oSum
 outLayerY=[0,1,2,3,4,5,6,7,8,9]
 
@@ -93,13 +96,13 @@ def nn(inputs,training):
 	count+=1
 	if(training):
 		for i in range(0,h):
-			for j in range(0,o):
-				weights[i][j]= np.dot(hiddenOuts[i],outLayerY)
+				weights[i]= np.dot(hiddenOuts[i],outLayerY)
 
 	maxOut=-50
 	result=0
-	console.log(outputLayer[0])
-	console.log(len(outputLayer))
+	print("output layer")
+	print(outputLayer[0])
+	print(len(outputLayer))
 	for o in range(0,len(outputLayer)):
 		if(outputLayer[o]>maxOut):
 			maxOut=outputLayer[o]
@@ -111,10 +114,14 @@ def trainNN(X,y):
 	
 	for x in range(0,len(X)):
 		out=nn(X[x],True)
-		# print("result:")
-		# print(out)
-		# print("should be:")
-		# print(y[x])
+		print("********************")
+		print("********************")
+		print("********************")
+		print("********************")
+		print("result:")
+		print(out)
+		print("should be:")
+		print(y[x])
 
 testingResults=[]
 def testNN(X,y):
