@@ -81,8 +81,10 @@ def outSum(i,hiddenOuts):
 		# print hiddenOuts[h]
 	return oSum
 outLayerY=[0,1,2,3,4,5,6,7,8,9]
+outLaw=[[1,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0,0,0]
+,[0,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,1]]
 
-def nn(inputs,training):
+def nn(inputs,training,result):
 	count=0;
 	# for i in inputs:
 	hiddenOuts=[]
@@ -95,7 +97,8 @@ def nn(inputs,training):
 	count+=1
 	if(training):
 		for i in range(0,h):
-				weights[i]= np.dot(hiddenOuts[i],outLayerY)
+				# weights[i]= np.dot(hiddenOuts[i],outLayerY)
+				weights[i]= np.dot(hiddenOuts[i],outLaw[int(result)])
 
 	maxOut=-50
 	result=0
@@ -109,7 +112,7 @@ def nn(inputs,training):
 def trainNN(X,y):
 	
 	for x in range(0,len(X)):
-		out=nn(X[x],True)
+		out=nn(X[x],True,y[x])
 		# print("********************")
 		# print("********************")
 		# print("********************")
@@ -125,7 +128,7 @@ def testNN(X,y):
 	correct=0
 	whole=0
 	for x in range(0,len(X)):
-		out=nn(X[x],False)
+		out=nn(X[x],False,y[x])
 		# print("result:")
 		# print(out)
 		# print("should be:")
@@ -135,7 +138,7 @@ def testNN(X,y):
 			#print("correct")
 			correct+=1
 		whole+=1
-	res=correct/whole
+	res=correct/whole #does not work
 	testingResults.append(res)
 	testingCorrect.append(correct)
 	print(res)
@@ -158,6 +161,7 @@ for train_index, test_index in kf.split(X):
     testNN(X_test,y_test)
 
 print(testingResults);
+print(testingCorrect);
 
 
 
