@@ -15,6 +15,154 @@ a = mnist.data.shape
 b = mnist.target.shape
 c = np.unique(mnist.target)
 d = mnist.DESCR
+
+mnist.data = [[0	,0, 0],
+[0	,1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0],
+[0,	1,	1],
+[0,	0,	1],
+[1,	0,	1],
+[0,	1,	0],
+[1,	1,	0],
+[1,	0,	0],
+[1,	1,	1],
+[0,	0,	0]]
+
+mnist.target = [0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0,
+1,
+0]
 print(a)
 print(b)
 print(c)
@@ -248,11 +396,34 @@ class NeuralNetwork(object):
 
 def train(X,y):
     count=0;
+    arr = [];
     for x in range(len(X)):
     #for x in range(3000):
         guess = q1Network.createOutput(X[x])
         q1Network.backpropogation(y[x])
         count+=1;
+        num0 = 0
+        num1 = 0
+        num2 = 0
+        num3 = 0
+        num4 = 0
+        num5 = 0
+        num6 = 0
+        num7 = 0
+        num8 = 0
+        num9 = 0
+
+        if(guess == 0 ): num0 += 1
+        if(guess == 1 ): num1 += 1
+        if(guess == 2 ): num2 += 1
+        if(guess == 3 ): num3 += 1
+        if(guess == 4 ): num4 += 1
+        if(guess == 5 ): num5 += 1
+        if(guess == 6 ): num6 += 1
+        if(guess == 7 ): num7 += 1
+        if(guess == 8 ): num8 += 1
+        if(guess == 9 ): num9 += 1
+
 #        print(guess)
 #        print(y[x])
 #        print()
@@ -262,6 +433,16 @@ def train(X,y):
         #     print(guess)
         #     print(y[x])
         #     print(q1Network.outputLayer[0].weights[4][1])
+    print(num0)
+    print(num1)
+    print(num2)
+    print(num3)
+    print(num4)
+    print(num5)
+    print(num6)
+    print(num7)
+    print(num8)
+    print(num9)
 
 
 testingResults=[]
@@ -282,7 +463,7 @@ def test(X,y):
 
 X=mnist.data
 y=mnist.target
-q1Network = NeuralNetwork(784,10,3)
+q1Network = NeuralNetwork(3,3,5,1)
 # print(q1Network.createOutput(X[14600]))
 # print(y[14600])
 # print(y)
